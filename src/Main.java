@@ -1,6 +1,10 @@
+import java.io.File;
+import java.util.List;
+
 public class Main {
 
-    public static void main(String[] args) {
-        System.out.println("Hello World!");
+    public static void main(String[] args) throws Exception {
+        Alphabet a = new Alphabet("src/data/test.txt");
+        a.printAllAscii();
     }
 }

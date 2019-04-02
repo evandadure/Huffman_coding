@@ -1,4 +1,6 @@
 *.xml
+.xml
+idea
 .idea
 src
 .class

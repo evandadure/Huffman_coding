@@ -1,9 +1,4 @@
 *.xml
-.xml
 idea
 .idea
-src
-.class
 *.class
-*.xml
-.idea/vcs.xml

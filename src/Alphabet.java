@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.Arrays;
-import java.util.List;
 
 public class Alphabet {
 
@@ -18,11 +17,11 @@ public class Alphabet {
         this.path = path;
     }
 
-    private String get_file_content(String path) throws Exception
+    public static String get_file_content(String path) throws Exception
     {
         String line = null;
         String output = new String("");
-        BufferedReader bufferedReader = new BufferedReader(new FileReader(this.path));
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
         // We add each line of the file to our new String, adding \n (new line) after each line
         while ((line = bufferedReader.readLine()) != null)
 //            System.out.println(line);
@@ -40,16 +39,7 @@ public class Alphabet {
         return tempArray;
     }
 
-    private String charToString(Character varChar){
-        String varStr=varChar.toString();
-        if(varStr.contains("\n"))
-            varStr = "\\n";
-        if(varStr.contains(" "))
-            varStr = "SPACE";
-        return varStr;
-    }
-
-    private String build_freq(char[] sortedInputStr){
+    private String build_frequencies(char[] sortedInputStr) {
         Character currentChar = sortedInputStr[0];
         String freq = "";
         int nbCurrChar = 1;
@@ -58,49 +48,40 @@ public class Alphabet {
         // before it, or it's a different char. In this case, we add the previous char in our "list" of frequencies
         // (which is actually a String).
         for (int i = 1; i < sortedInputStr.length; i++) {
-            if(sortedInputStr[i] == currentChar)
-                nbCurrChar+=1;
-            else{
-                freq+="\n"+this.charToString(sortedInputStr[i-1])+" "+nbCurrChar;
-                nbCurrChar=1;
+            if (sortedInputStr[i] == currentChar)
+                nbCurrChar += 1;
+            else {
+                freq += "\n" + sortedInputStr[i - 1] + " " + nbCurrChar;
+                nbCurrChar = 1;
                 currentChar = sortedInputStr[i];
                 nbDifferentChar += 1;
             }
         }
-        freq+="\n"+this.charToString(sortedInputStr[sortedInputStr.length-1])+" "+nbCurrChar+"\n"+nbDifferentChar;
-        System.out.println(freq);
+        freq += "\n" + sortedInputStr[sortedInputStr.length - 1] + " " + nbCurrChar;
+        freq = nbDifferentChar + freq;
+//        System.out.println(freq);
 
-        return "yey";
+        return freq;
     }
 
+    public static void writeInFile(String filepath, String stringToWrite) throws IOException {
+        FileWriter fileWriter = new FileWriter(filepath);
+        PrintWriter printWriter = new PrintWriter(fileWriter);
+        printWriter.print(stringToWrite);
+        printWriter.close();
+    }
 
-
-    public void build() throws Exception {
+    public void build_freq_file(String filepath) throws Exception {
+        // Sets one character per line in a String
         String content = this.get_file_content(this.path);
+        // Sorts these character by ASCII number
         char[] sortedContent = this.sort_string(content);
-        String freq = this.build_freq(sortedContent);
-        System.out.println(freq);
+        // Regroups each character and associates the frequency of each of them after a space
+        String freq = this.build_frequencies(sortedContent);
+        // Puts the freq String created in the freq file
+        this.writeInFile(filepath,freq);
     }
 
 
 
-
-
-    //A test method to print the input and output after having sorted the input
-//    public void printInputOutput () throws Exception {
-//        String inputText = this.get_file_content(this.path);
-//        System.out.println(inputText);
-//        String outputText = new String("");
-//        outputText = this.sort_string(inputText);
-//        System.out.println("----------------------");
-//        System.out.println(outputText);
-//    }
-
-
-
-
-    //get_fichier -> return string
-    //mise dans un tableau trié par ordre ascii, avec fréquence associée au caractère
-    //modification du fichier freq.dat
-    //mise en private des méthodes sauf la principale en public
 }

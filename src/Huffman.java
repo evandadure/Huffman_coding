@@ -61,48 +61,17 @@ public class Huffman {
         this.listLetters = sortedList;
     }
 
-    public void get_letters_freqs(String filepath) throws IOException {
-        String line;
-        String output;
-        BufferedReader bufferedReader = new BufferedReader(new FileReader(filepath));
-        while ((line = bufferedReader.readLine()) != null) {
-            // Each line of the file can be one of the following :
-            // - only a number (the first line only)
-            // - empty (the line of the character \n if it is in our freq file)
-            // - one space and a number (the line following the character \n)
-            // - a character, one space, and a number (all other characters)
-            // Here, we don't want to manipulate the first line (containing the number of different characters) :
-            if(line.contains(" ")) {
-                char secondChar = line.substring(1,2).charAt(0);
-                // if the second character is a space, then it's a "normal" line : a char, a space, a number
-                // in this case, we add to our list of char the current character, and its frequency (read after the space)
-                if(secondChar == ' ')
-                    this.addLetterToList(line.charAt(0),Integer.parseInt(line.substring(2)));
-                // if the second character is not a space, it means that it's the line following a \n, containing only
-                // a space and the number of \n in the original text
-                if(secondChar != ' ')
-                    this.addLetterToList('\n',Integer.parseInt(line.substring(1)));
+    public void get_letters_freqs(String filepath) throws Exception {
+        String freq_string = Alphabet.get_file_content(filepath);
+        char[] freq_arr = freq_string.toCharArray();
+        for (int i = 0; i < freq_arr.length ; i++) {
+            if(freq_arr[i] == ' ' && freq_arr[i+1] != ' '){
+                char current_char = freq_arr[i-1];
+                int current_freq = Integer.parseInt(freq_string.substring(i+1).split("(?=\\D)")[0]);
+                this.addLetterToList(current_char,current_freq);
             }
-//            System.out.println(line.substring(0,1));
         }
-        bufferedReader.close();
         this.sort_letter_list();
-    }
-
-    public String get_file_content(String path) throws Exception
-    {
-        String content = "";
-        File f = new File(path);
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader(
-                        new FileInputStream(f),
-                        Charset.forName("UTF-8")));
-        int c;
-        while((c = reader.read()) != -1) {
-            char character = (char) c;
-            content+=character;
-        }
-        return content;
     }
 
     public ArrayList<Node> get_lightest_nodes(){
@@ -300,7 +269,7 @@ public class Huffman {
         // from this root node, go through all nodes to associate a binary code to each letter of the listLetters list
         this.set_binary_codes(this.getListNodes().get(0),"");
         // creates a binary string made of the compressed file content
-        String compressed_binary_string = this.string_to_binary(this.get_file_content(compressedFilePath));
+        String compressed_binary_string = this.string_to_binary(Alphabet.get_file_content(compressedFilePath));
         // decodes the binary string to recreate the original string
         String decoded_string = this.get_decoded_string_binary(compressed_binary_string);
         // puts the coded string into the an output file (which has the same name as the input + "coded")

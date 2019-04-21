@@ -1,4 +1,5 @@
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 
 public class Alphabet {
@@ -19,16 +20,18 @@ public class Alphabet {
 
     public static String get_file_content(String path) throws Exception
     {
-        String line = null;
-        String output = new String("");
-        BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
-        // We add each line of the file to our new String, adding \n (new line) after each line
-        while ((line = bufferedReader.readLine()) != null)
-//            System.out.println(line);
-            output+=line+"\n";
-        bufferedReader.close();
-        // Finally we remove the last \n that we added (which counts as 1 character)
-        return output.substring(0,output.length()-1);
+        String content = "";
+        File f = new File(path);
+        BufferedReader reader = new BufferedReader(
+                new InputStreamReader(
+                        new FileInputStream(f),
+                        Charset.forName("UTF-8")));
+        int c;
+        while((c = reader.read()) != -1) {
+            char character = (char) c;
+            content+=character;
+        }
+        return content;
     }
 
     private char[] sort_string(String inputStr){
@@ -43,7 +46,6 @@ public class Alphabet {
         Character currentChar = sortedInputStr[0];
         String freq = "";
         int nbCurrChar = 1;
-        int nbDifferentChar = 1;
         // In this for loop, we look at every character in our char array, and check if either it's same char as the one
         // before it, or it's a different char. In this case, we add the previous char in our "list" of frequencies
         // (which is actually a String).
@@ -54,11 +56,10 @@ public class Alphabet {
                 freq += "\n" + sortedInputStr[i - 1] + " " + nbCurrChar;
                 nbCurrChar = 1;
                 currentChar = sortedInputStr[i];
-                nbDifferentChar += 1;
             }
         }
         freq += "\n" + sortedInputStr[sortedInputStr.length - 1] + " " + nbCurrChar;
-        freq = nbDifferentChar + freq;
+        freq = freq.substring(1);
 //        System.out.println(freq);
 
         return freq;

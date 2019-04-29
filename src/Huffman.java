@@ -128,6 +128,7 @@ public class Huffman {
     }
 
     public Letter get_first_letter_from_binary_string(String binaryString){
+        //this methods finds the only letter whose binary code is matching the first bits of the binary string
         Letter firstLetter = new Letter();
         for(Letter l:this.listLetters){
             String char_binary = l.getBinaryCode();
@@ -143,11 +144,10 @@ public class Huffman {
 
 
     public String get_decoded_string_binary(String binaryString){
-        // we remove decoded parts of the binaryString until it's fully decoded.
+        // decode a coded (compressed) string and returns the original string
         int nbLetterZeros = 0;
         String decoded_string = "";
         Letter letterZeros = this.getLetterZeros();
-        System.out.println("Lettre 0 :"+letterZeros.getCharac().toString());
         while(binaryString.length() > 0){
             // when there is only zeros left in the binary string, we check if all the occurrences of the letter with
             // its code only composed by zeros have been found. If it's the case, the loop is ended
@@ -160,6 +160,7 @@ public class Huffman {
                 if(firstLetter == letterZeros)
                     nbLetterZeros+=1;
                 decoded_string+=firstLetter.getCharac();
+                // we remove decoded parts of the binaryString until it's fully decoded.
                 binaryString = binaryString.substring(firstLetter.getBinaryCode().length());
             }
         }
@@ -167,6 +168,7 @@ public class Huffman {
     }
 
     public String get_coded_binary_string(String stringToCode){
+        // creates a string from the binary code of each character of the string
         String codedString = "";
         char stringArray[] = stringToCode.toCharArray();
         for(char c:stringArray){

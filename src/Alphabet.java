@@ -25,7 +25,7 @@ public class Alphabet {
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(
                         new FileInputStream(f),
-                        Charset.forName("UTF-8")));
+                        Charset.forName("ISO-8859-1")));
         int c;
         while((c = reader.read()) != -1) {
             char character = (char) c;
@@ -59,21 +59,20 @@ public class Alphabet {
             }
         }
         freq += "\n" + sortedInputStr[sortedInputStr.length - 1] + " " + nbCurrChar;
+        // The first \n is removed from the freq string
         freq = freq.substring(1);
-//        System.out.println(freq);
 
         return freq;
     }
 
     public static void writeInFile(String filepath, String stringToWrite) throws IOException {
-        FileWriter fileWriter = new FileWriter(filepath);
-        PrintWriter printWriter = new PrintWriter(fileWriter);
+        File file = new File(filepath);
+        PrintWriter printWriter = new PrintWriter(file, "ISO-8859-1");
         printWriter.print(stringToWrite);
         printWriter.close();
     }
 
     public void build_freq_file(String filepath) throws Exception {
-        // Sets one character per line in a String
         String content = this.get_file_content(this.path);
         // Sorts these character by ASCII number
         char[] sortedContent = this.sort_string(content);

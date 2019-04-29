@@ -276,6 +276,5 @@ public class Huffman {
         String decoded_string = this.get_decoded_string_binary(compressed_binary_string);
         // puts the coded string into the an output file (which has the same name as the input + "coded")
         Alphabet.writeInFile(decompressedFilePath,decoded_string);
-
     }
 }

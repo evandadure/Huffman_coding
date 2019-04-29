@@ -15,7 +15,7 @@ public class Main {
 //        }
         // -------- CODE TO DECOMPRESS A COMPRESSED TEXT --------
         Huffman h2 = new Huffman();
-        h2.decompress("src/data/alice_freq.txt","src/data/alice_comp.txt");
+        h2.decompress("src/data/freq.txt","src/data/huffmanFile.bin");
 
 
     }
